@@ -5,12 +5,15 @@
   "description": "Noor Fashion — a small e-commerce site with a local SQLite database.",
   "main": "server.js",
   "scripts": {
-    "start": "node --disable-warning=ExperimentalWarning server.js",
-    "dev": "node --watch --disable-warning=ExperimentalWarning server.js",
+    "start": "node server.js",
+    "dev": "node --watch server.js",
     "reset-db": "node scripts/reset-db.js"
   },
   "engines": {
-    "node": ">=22.5.0"
+    "node": ">=18"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@libsql/client": "^0.18.0"
+  }
 }
