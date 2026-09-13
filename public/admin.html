@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Admin — Noor Fashion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin">
+
+  <!-- Shown until an admin is logged in -->
+  <div class="gate" id="gate" hidden>
+    <form id="adminLogin" class="stack gate-card" novalidate>
+      <div class="logo">NOOR <span>FASHION</span></div>
+      <p class="eyebrow" style="margin-top:18px">STAFF ACCESS</p>
+      <h2>Admin login</h2>
+      <input required name="email" type="email" placeholder="Email address" autocomplete="email">
+      <input required name="password" type="password" placeholder="Password" autocomplete="current-password">
+      <p class="form-error" data-error hidden></p>
+      <button class="primary-btn full" type="submit">Log in →</button>
+      <a class="tiny" href="/" style="text-align:center">← Back to the shop</a>
+    </form>
+  </div>
+
+  <!-- The panel itself -->
+  <div id="panel" hidden>
+    <header class="admin-head">
+      <div class="logo">NOOR <span>FASHION</span></div>
+      <nav class="admin-tabs">
+        <button class="tab active" data-view="dashboard">Dashboard</button>
+        <button class="tab" data-view="products">Products</button>
+        <button class="tab" data-view="orders">Orders</button>
+        <button class="tab" data-view="messages">Messages</button>
+      </nav>
+      <div class="admin-head-right">
+        <a class="tiny" href="/" target="_blank">View shop ↗</a>
+        <button class="ghost-btn" id="adminLogout">Log out</button>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <section data-view-panel="dashboard">
+        <p class="eyebrow">OVERVIEW</p>
+        <h2>Dashboard</h2>
+        <div class="stat-grid" id="statGrid"></div>
+      </section>
+
+      <section data-view-panel="products" hidden>
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">CATALOGUE</p>
+            <h2>Products</h2>
+          </div>
+          <button class="primary-btn" id="newProductBtn">+ Add product</button>
+        </div>
+        <div class="table-wrap"><table id="productTable"></table></div>
+      </section>
+
+      <section data-view-panel="orders" hidden>
+        <p class="eyebrow">CUSTOMER ORDERS</p>
+        <h2>Orders</h2>
+        <div id="orderList"></div>
+      </section>
+
+      <section data-view-panel="messages" hidden>
+        <p class="eyebrow">INBOX</p>
+        <h2>Messages</h2>
+        <div id="messageList"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <div class="modal narrow" id="productModal" role="dialog" aria-modal="true">
+    <button class="modal-close" data-close aria-label="Close">×</button>
+    <form id="productForm" class="stack" novalidate>
+      <p class="eyebrow">CATALOGUE</p>
+      <h2 id="productFormTitle">Add product</h2>
+      <input type="hidden" name="id">
+      <input required name="name" type="text" placeholder="Product name">
+      <input required name="category" type="text" placeholder="Category (abaya, kurti, hijab…)" list="categoryList">
+      <datalist id="categoryList"></datalist>
+      <div class="two-col">
+        <input required name="price" type="number" min="1" placeholder="Price (Rs.)">
+        <input required name="stock" type="number" min="0" placeholder="Stock">
+      </div>
+      <textarea name="description" rows="3" placeholder="Short description"></textarea>
+      <div class="two-col">
+        <label class="color-field">Shade 1 <input name="tone1" type="color" value="#eee2d7"></label>
+        <label class="color-field">Shade 2 <input name="tone2" type="color" value="#d7c1b2"></label>
+      </div>
+      <label class="check-field"><input name="featured" type="checkbox"> Show a “Featured” badge</label>
+      <p class="form-error" data-error hidden></p>
+      <button class="primary-btn full" type="submit">Save product</button>
+    </form>
+  </div>
+
+  <div class="toasts" id="toasts"></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# The database holds real orders and accounts — keep it out of version control.
+data/
+node_modules/
+*.log
+.DS_Store

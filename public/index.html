@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Noor Fashion - Elegant Pakistani fashion and modest wear.">
+  <title>Noor Fashion | Elegance in Every Thread</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="topbar">Free delivery on orders over Rs. 5,000 • Cash on Delivery available</div>
+
+  <header class="header">
+    <a class="logo" href="#home">NOOR <span>FASHION</span></a>
+    <nav id="nav">
+      <a href="#home">Home</a>
+      <a href="#shop">Shop</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" id="searchBtn" aria-label="Search" aria-expanded="false">⌕</button>
+
+      <div class="account-wrap">
+        <button class="icon-btn account-btn" id="accountBtn" aria-expanded="false">
+          <span id="accountLabel">Account</span>
+        </button>
+        <div class="account-menu" id="accountMenu" hidden></div>
+      </div>
+
+      <button class="cart-btn" id="cartBtn">Cart <span id="cartCount">0</span></button>
+      <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">NEW SEASON • 2026</p>
+        <h1>Elegance in<br><em>Every Thread.</em></h1>
+        <p class="hero-text">Discover thoughtfully designed modest wear made for your everyday elegance.</p>
+        <a class="primary-btn" href="#shop">Shop Collection <span>→</span></a>
+      </div>
+      <div class="hero-art">
+        <div class="hero-circle"></div>
+        <div class="dress-shape">NOOR</div>
+        <div class="floating-card">New<br><strong>Collection</strong></div>
+      </div>
+    </section>
+
+    <section class="section" id="shop">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">CURATED FOR YOU</p>
+          <h2>Featured Collection</h2>
+        </div>
+        <div class="shop-tools">
+          <div class="filters" id="filters"></div>
+          <select class="sort-select" id="sortSelect" aria-label="Sort products">
+            <option value="newest">Newest first</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="name">Name: A–Z</option>
+          </select>
+        </div>
+      </div>
+      <p class="result-note" id="resultNote"></p>
+      <div class="products" id="products"></div>
+    </section>
+
+    <section class="banner">
+      <div>
+        <p class="eyebrow">NOOR PROMISE</p>
+        <h2>Timeless pieces.<br>Confident you.</h2>
+      </div>
+      <p>Quality fabrics, graceful silhouettes and easy everyday style — all in one collection.</p>
+    </section>
+
+    <section class="info-grid" id="about">
+      <article><span>01</span><h3>Quality First</h3><p>Carefully selected fabrics and attention to detail in every piece.</p></article>
+      <article><span>02</span><h3>Easy Shopping</h3><p>Choose your favorite pieces and place your order in a few simple steps.</p></article>
+      <article><span>03</span><h3>Made for You</h3><p>Elegant styles designed to fit your everyday wardrobe.</p></article>
+    </section>
+
+    <section class="contact" id="contact">
+      <div>
+        <p class="eyebrow">GET IN TOUCH</p>
+        <h2>Let's talk fashion.</h2>
+        <p>Have a question about sizing, delivery or an order? Send us a message.</p>
+      </div>
+      <form id="contactForm" novalidate>
+        <input required name="name" type="text" placeholder="Your name" autocomplete="name">
+        <input required name="email" type="email" placeholder="Email address" autocomplete="email">
+        <textarea required name="message" rows="4" placeholder="Your message"></textarea>
+        <button class="primary-btn" type="submit">Send Message →</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="logo">NOOR <span>FASHION</span></div>
+    <p>Elegant modest wear, made with care.</p>
+    <small>© 2026 Noor Fashion. All rights reserved.</small>
+  </footer>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ------------------------------------------------------------ cart -->
+  <aside class="cart-panel" id="cartPanel" aria-label="Shopping cart">
+    <div class="cart-head"><h3>Your Cart</h3><button id="closeCart" aria-label="Close cart">×</button></div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-bottom">
+      <div class="sum-row"><span>Subtotal</span><span id="cartSubtotal">Rs. 0</span></div>
+      <div class="sum-row"><span>Delivery</span><span id="cartShipping">—</span></div>
+      <div class="total"><span>Total</span><strong id="cartTotal">Rs. 0</strong></div>
+      <button class="primary-btn full" id="checkoutBtn">Proceed to Checkout →</button>
+      <button class="ghost-btn full" id="whatsappBtn">Order on WhatsApp</button>
+      <p class="tiny" id="shippingNote"></p>
+    </div>
+  </aside>
+
+  <!-- --------------------------------------------------------- product -->
+  <div class="modal" id="productModal" role="dialog" aria-modal="true">
+    <button class="modal-close" data-close aria-label="Close">×</button>
+    <div id="modalContent"></div>
+  </div>
+
+  <!-- ------------------------------------------------------------ auth -->
+  <div class="modal narrow" id="authModal" role="dialog" aria-modal="true">
+    <button class="modal-close" data-close aria-label="Close">×</button>
+    <div class="tabs">
+      <button class="tab active" data-tab="login">Log in</button>
+      <button class="tab" data-tab="signup">Create account</button>
+    </div>
+
+    <form id="loginForm" class="stack" novalidate>
+      <p class="eyebrow">WELCOME BACK</p>
+      <h2>Log in</h2>
+      <input required name="email" type="email" placeholder="Email address" autocomplete="email">
+      <input required name="password" type="password" placeholder="Password" autocomplete="current-password">
+      <p class="form-error" data-error hidden></p>
+      <button class="primary-btn full" type="submit">Log in →</button>
+    </form>
+
+    <form id="signupForm" class="stack" hidden novalidate>
+      <p class="eyebrow">JOIN NOOR</p>
+      <h2>Create account</h2>
+      <input required name="name" type="text" placeholder="Full name" autocomplete="name">
+      <input required name="email" type="email" placeholder="Email address" autocomplete="email">
+      <input name="phone" type="tel" placeholder="Phone number (optional)" autocomplete="tel">
+      <input required name="password" type="password" placeholder="Password (min 6 characters)" autocomplete="new-password">
+      <p class="form-error" data-error hidden></p>
+      <button class="primary-btn full" type="submit">Create account →</button>
+    </form>
+  </div>
+
+  <!-- -------------------------------------------------------- checkout -->
+  <div class="modal" id="checkoutModal" role="dialog" aria-modal="true">
+    <button class="modal-close" data-close aria-label="Close">×</button>
+    <div class="checkout-grid">
+      <form id="checkoutForm" class="stack" novalidate>
+        <p class="eyebrow">DELIVERY DETAILS</p>
+        <h2>Checkout</h2>
+        <input required name="name" type="text" placeholder="Full name" autocomplete="name">
+        <input required name="email" type="email" placeholder="Email address" autocomplete="email">
+        <input required name="phone" type="tel" placeholder="Phone number" autocomplete="tel">
+        <input required name="address" type="text" placeholder="Street address" autocomplete="street-address">
+        <input required name="city" type="text" placeholder="City" autocomplete="address-level2">
+        <textarea name="notes" rows="2" placeholder="Order notes (optional)"></textarea>
+        <p class="form-error" data-error hidden></p>
+        <button class="primary-btn full" type="submit">Place Order — Cash on Delivery →</button>
+      </form>
+      <aside class="order-summary">
+        <h3>Order summary</h3>
+        <div id="checkoutLines"></div>
+        <div class="sum-row"><span>Subtotal</span><span id="coSubtotal">Rs. 0</span></div>
+        <div class="sum-row"><span>Delivery</span><span id="coShipping">—</span></div>
+        <div class="total"><span>Total</span><strong id="coTotal">Rs. 0</strong></div>
+        <p class="tiny">Payment is collected in cash when your order is delivered.</p>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ---------------------------------------------------------- orders -->
+  <div class="modal" id="ordersModal" role="dialog" aria-modal="true">
+    <button class="modal-close" data-close aria-label="Close">×</button>
+    <div class="tabs">
+      <button class="tab active" data-otab="mine">My orders</button>
+      <button class="tab" data-otab="track">Track an order</button>
+    </div>
+
+    <div id="ordersMine">
+      <div id="ordersList"></div>
+    </div>
+
+    <div id="ordersTrack" hidden>
+      <p class="eyebrow">ORDER LOOKUP</p>
+      <h2>Track an order</h2>
+      <form id="trackForm" class="track-form" novalidate>
+        <input required name="orderNo" type="text" placeholder="Order number (e.g. NF-1001)">
+        <input required name="phone" type="tel" placeholder="Phone number used on the order">
+        <button class="primary-btn" type="submit">Track →</button>
+      </form>
+      <p class="form-error" data-error hidden></p>
+      <div id="trackResult"></div>
+    </div>
+  </div>
+
+  <!-- --------------------------------------------------------- success -->
+  <div class="modal narrow" id="successModal" role="dialog" aria-modal="true">
+    <button class="modal-close" data-close aria-label="Close">×</button>
+    <div id="successContent"></div>
+  </div>
+
+  <div class="search-box" id="searchBox">
+    <input id="searchInput" placeholder="Search dresses, abayas, hijabs..." aria-label="Search products">
+  </div>
+
+  <div class="toasts" id="toasts"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

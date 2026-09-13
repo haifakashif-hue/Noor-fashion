@@ -1,0 +1,84 @@
+/* ==========================================================================
+   Admin panel — same palette as the shop, denser layout.
+   Loaded after style.css.
+   ========================================================================== */
+
+body.admin{background:var(--cream)}
+
+/* ------------------------------------------------------------------- gate */
+
+.gate{min-height:100vh;display:grid;place-items:center;padding:30px}
+.gate-card{background:#fff;padding:40px;width:min(410px,100%);border:1px solid var(--line);box-shadow:0 25px 60px #0000000d}
+.gate-card .logo{text-align:center}
+
+/* ---------------------------------------------------------------- chrome */
+
+.admin-head{background:var(--paper);border-bottom:1px solid var(--line);padding:16px 4%;display:flex;align-items:center;justify-content:space-between;gap:25px;flex-wrap:wrap;position:sticky;top:0;z-index:20}
+.admin-tabs{display:flex;gap:0;border:0}
+.admin-tabs .tab{border-bottom:2px solid transparent}
+.admin-head-right{display:flex;align-items:center;gap:16px}
+.admin-head-right .tiny{margin:0;white-space:nowrap}
+.admin-head-right .ghost-btn{padding:9px 16px}
+
+.admin-main{padding:45px 4% 80px;max-width:1300px;margin:0 auto}
+.panel-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:25px}
+
+/* ------------------------------------------------------------------ stats */
+
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:25px}
+.stat{background:var(--paper);border:1px solid var(--line);padding:24px}
+.stat strong{display:block;font-family:"Playfair Display",serif;font-size:34px;line-height:1.1}
+.stat span{font-size:12px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.stat.alert strong{color:var(--accent)}
+
+/* ------------------------------------------------------------------ table */
+
+.table-wrap{background:var(--paper);border:1px solid var(--line);overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:720px}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
+th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--cream)}
+tbody tr:hover{background:#fdfaf6}
+tbody tr.inactive{opacity:.5}
+td.actions{white-space:nowrap;text-align:right}
+td.actions button{margin-left:6px}
+
+.swatch{width:34px;height:34px;border-radius:3px;border:1px solid var(--line);display:inline-block;vertical-align:middle}
+.low{color:var(--accent);font-weight:700}
+
+/* ----------------------------------------------------------------- orders */
+
+.admin-order{background:var(--paper);border:1px solid var(--line);padding:20px;margin-bottom:14px}
+.admin-order header{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:start;margin-bottom:14px}
+.admin-order .order-no{font-family:"Playfair Display",serif;font-size:19px}
+.admin-order .who{font-size:13px;color:var(--muted);margin-top:3px}
+.admin-order ul{list-style:none;font-size:13px;border-top:1px solid var(--line);padding-top:10px}
+.admin-order li{display:flex;justify-content:space-between;padding:4px 0;color:var(--muted)}
+.admin-order .order-foot{display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:10px;padding-top:10px;font-weight:700}
+.status-select{border:1px solid var(--line);background:#fff;padding:8px 12px;border-radius:30px;font:inherit;font-size:13px;cursor:pointer;outline:none}
+.status-select:focus{border-color:var(--accent)}
+
+/* --------------------------------------------------------------- messages */
+
+.msg{background:var(--paper);border:1px solid var(--line);padding:20px;margin-bottom:12px}
+.msg.unread{border-left:3px solid var(--accent)}
+.msg header{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.msg strong{font-size:15px}
+.msg .tiny{margin:0}
+.msg p{font-size:14px;color:var(--muted);white-space:pre-wrap}
+
+/* ------------------------------------------------------------------ forms */
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.color-field,.check-field{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);border:1px solid var(--line);padding:8px 12px;background:#fff}
+.color-field input[type=color]{width:42px;height:30px;padding:0;border:0;background:none;cursor:pointer;margin-left:auto}
+.check-field{justify-content:flex-start}
+.check-field input{width:auto}
+
+.empty-box{background:var(--paper);border:1px solid var(--line);padding:60px 20px;text-align:center;color:var(--muted)}
+.empty-box strong{display:block;font-family:"Playfair Display",serif;font-size:21px;color:var(--ink);margin-bottom:6px}
+
+@media(max-width:700px){
+  .admin-head{gap:14px}
+  .admin-tabs{order:3;width:100%;overflow-x:auto}
+  .two-col{grid-template-columns:1fr}
+}
