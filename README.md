@@ -31,6 +31,11 @@ creates the admin account.
 To use a different port: `PORT=5000 npm start`
 While editing, `npm run dev` restarts on file changes.
 
+To run locally against the *production* Turso database instead of the local
+file, put `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` in a `.env` file and run
+`npm run start:cloud` (needs Node 20.6+). `.env` is gitignored — never commit
+it.
+
 ### Admin login
 
 ```

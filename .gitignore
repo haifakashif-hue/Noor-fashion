@@ -3,3 +3,7 @@ data/
 node_modules/
 *.log
 .DS_Store
+
+# Local secrets — never commit database tokens
+.env
+.env.*
