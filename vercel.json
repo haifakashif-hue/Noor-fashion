@@ -2,10 +2,14 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "outputDirectory": "public",
   "rewrites": [
-    { "source": "/", "destination": "/index.html" }
+    {
+      "source": "/",
+      "destination": "/index.html"
+    }
   ],
   "functions": {
-    "api/[...path].js": { "maxDuration": 15 },
-    "api/health.js": { "maxDuration": 15 }
+    "api/[...path].js": {
+      "maxDuration": 15
+    }
   }
 }
