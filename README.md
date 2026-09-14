@@ -86,10 +86,18 @@ Push to `main`, or hit **Redeploy** in Vercel. On the first request the app
 creates its tables, adds the sample products, and creates the admin account
 from `ADMIN_EMAIL` / `ADMIN_PASSWORD`.
 
-> If `TURSO_DATABASE_URL` is missing, the app falls back to a local file — on
-> Vercel that fails with `FUNCTION_INVOCATION_FAILED`, because the filesystem
-> is read-only. A crash right after deploying almost always means the
-> environment variables are not set.
+### 4. Check it
+
+Open `/api/health` on your deployment. A healthy site answers:
+
+```json
+{"ok":true,"database":"turso","products":12}
+```
+
+If the database variables are missing, every `/api/` request answers with a
+JSON error that names them, instead of Vercel's generic crash page.
+
+The live shop: https://noor-fashion-six.vercel.app
 
 ---
 
