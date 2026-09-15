@@ -83,6 +83,17 @@
       <p class="eyebrow">CATALOGUE</p>
       <h2 id="productFormTitle">Add product</h2>
       <input type="hidden" name="id">
+      <div class="photo-field">
+        <div class="photo-preview" id="photoPreview"><span id="photoEmpty">No photo</span></div>
+        <div class="photo-actions">
+          <label class="ghost-btn photo-pick">
+            <span id="photoPickLabel">Choose photo</span>
+            <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+          </label>
+          <button type="button" class="link-btn" id="photoRemove" hidden>Remove photo</button>
+          <p class="tiny">JPG, PNG or WebP. Resized automatically before upload.</p>
+        </div>
+      </div>
       <input required name="name" type="text" placeholder="Product name">
       <input required name="category" type="text" placeholder="Category (abaya, kurti, hijab…)" list="categoryList">
       <datalist id="categoryList"></datalist>

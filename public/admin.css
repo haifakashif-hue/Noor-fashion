@@ -77,6 +77,16 @@ td.actions button{margin-left:6px}
 .empty-box{background:var(--paper);border:1px solid var(--line);padding:60px 20px;text-align:center;color:var(--muted)}
 .empty-box strong{display:block;font-family:"Playfair Display",serif;font-size:21px;color:var(--ink);margin-bottom:6px}
 
+/* ---------------------------------------------------------- product photo */
+
+.thumb{width:34px;height:44px;object-fit:cover;border:1px solid var(--line);border-radius:3px;display:block}
+.photo-field{display:grid;grid-template-columns:110px 1fr;gap:16px;align-items:center}
+.photo-preview{width:110px;height:140px;border:1px solid var(--line);position:relative;overflow:hidden;display:grid;place-items:center;font-size:12px;color:var(--muted)}
+.photo-preview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.photo-actions{display:grid;gap:6px;justify-items:start}
+.photo-actions .tiny{margin:0}
+.photo-pick{cursor:pointer;padding:10px 16px;font-size:14px}
+
 @media(max-width:700px){
   .admin-head{gap:14px}
   .admin-tabs{order:3;width:100%;overflow-x:auto}

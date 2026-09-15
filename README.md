@@ -119,8 +119,9 @@ The live shop: https://noor-fashion-six.vercel.app
 **For the shop owner (admin panel)**
 
 - Dashboard: orders, revenue, pending orders, low stock, unread messages
-- Add, edit and remove products, including stock and the colour shades used
-  for each product's placeholder image
+- Add, edit and remove products, including stock
+- Upload a photo for each product (JPG, PNG or WebP). Products without a photo
+  show a colour placeholder built from two shades you pick
 - See every order with the customer's contact and delivery details
 - Move an order through pending → confirmed → shipped → delivered / cancelled
 - Read contact-form messages
@@ -171,6 +172,16 @@ HttpOnly cookie, which also gets the `Secure` flag in production.
 **Removing a product** hides it rather than deleting it, so past orders keep
 their history.
 
+**Product photos live in the database**, because a serverless function has no
+disk to save files on. The admin panel shrinks each photo in the browser
+before uploading — at most 1200px on the long side, saved as WebP — so a
+several-megabyte phone photo arrives as a couple of hundred kilobytes. The
+server accepts only JPG, PNG and WebP, checks the file's actual bytes rather
+than trusting its label, and refuses anything over 1.5 MB. Photos are kept in
+their own `product_images` table so listing products never loads them, and
+each is served from `/api/products/:id/image?v=…`; the `v` changes whenever
+the photo does, so browsers and Vercel's CDN can cache it for a year.
+
 ---
 
 ## Resetting the local data
@@ -189,7 +200,7 @@ not touch the Turso database — for that, use `turso db shell`.
 
 1. Put your real WhatsApp number in `public/script.js` (`WHATSAPP_NUMBER`) if
    you want that button to work.
-2. Replace the coloured placeholder blocks with real product photos.
+2. Upload real photos for the sample products in the admin panel.
 3. Add rate limiting on login and checkout.
 4. Use a real payment gateway if you want online payments — this project only
    handles Cash on Delivery.

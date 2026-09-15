@@ -158,7 +158,9 @@ async function loadProducts() {
           .map(
             (p) => `
           <tr class="${p.active ? "" : "inactive"}">
-            <td><span class="swatch" style="background:linear-gradient(135deg,${esc(p.tone1)},${esc(p.tone2)})"></span></td>
+            <td>${p.image
+              ? `<img class="thumb" src="${esc(p.image)}" alt="">`
+              : `<span class="swatch" style="background:linear-gradient(135deg,${esc(p.tone1)},${esc(p.tone2)})"></span>`}</td>
             <td><strong>${esc(p.name)}</strong>${p.featured ? ' <span class="badge" style="position:static">FEATURED</span>' : ""}</td>
             <td>${esc(p.category)}</td>
             <td>${money(p.price)}</td>
@@ -195,6 +197,11 @@ function openProductForm(product) {
     form.featured.checked = product.featured === 1;
   }
 
+  photo.existing = product ? product.image : null;
+  photo.dataUrl = null;
+  photo.remove = false;
+  renderPhotoPreview();
+
   $("productModal").classList.add("open");
   $("overlay").classList.add("show");
 }
@@ -203,6 +210,100 @@ function closeModal() {
   $("productModal").classList.remove("open");
   $("overlay").classList.remove("show");
 }
+
+/* --------------------------------------------------------- product photo */
+
+const MAX_PHOTO_SIDE = 1200;
+const MAX_PHOTO_BYTES = 1.4 * 1024 * 1024;
+
+// What saving the form should do with the photo.
+const photo = { existing: null, dataUrl: null, remove: false };
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("Could not read that image"));
+    img.src = src;
+  });
+}
+
+/**
+ * Shrink a picked photo in the browser before it is uploaded: a 5 MB phone
+ * photo becomes a ~150 KB WebP, which keeps uploads fast and the database small.
+ */
+async function prepareImage(file) {
+  if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error("Choose a JPG, PNG or WebP image");
+  if (file.size > 20 * 1024 * 1024) throw new Error("That image is over 20 MB — choose a smaller one");
+
+  const objectUrl = URL.createObjectURL(file);
+  try {
+    const img = await loadImage(objectUrl);
+    const scale = Math.min(1, MAX_PHOTO_SIDE / Math.max(img.naturalWidth, img.naturalHeight));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(img.naturalWidth * scale);
+    canvas.height = Math.round(img.naturalHeight * scale);
+
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#fff"; // transparent PNGs get a clean background
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    for (const quality of [0.82, 0.7, 0.55]) {
+      let dataUrl = canvas.toDataURL("image/webp", quality);
+      // Browsers that cannot encode WebP silently return PNG; use JPEG there.
+      if (!dataUrl.startsWith("data:image/webp")) dataUrl = canvas.toDataURL("image/jpeg", quality);
+      if (dataUrl.length * 0.75 <= MAX_PHOTO_BYTES) return dataUrl;
+    }
+    throw new Error("That photo is too detailed to compress — try a smaller one");
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
+function renderPhotoPreview() {
+  const form = $("productForm");
+  const preview = $("photoPreview");
+  const src = photo.dataUrl || (photo.remove ? null : photo.existing);
+
+  preview.style.background = `linear-gradient(135deg,${form.tone1.value},${form.tone2.value})`;
+  preview.querySelector("img")?.remove();
+  if (src) {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = "Product photo";
+    preview.append(img);
+  }
+  $("photoEmpty").hidden = Boolean(src);
+  $("photoRemove").hidden = !src;
+  $("photoPickLabel").textContent = src ? "Change photo" : "Choose photo";
+}
+
+$("photoInput").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  e.target.value = ""; // so picking the same file again still fires
+  if (!file) return;
+
+  const form = $("productForm");
+  form.querySelector("[data-error]").hidden = true;
+  $("photoPickLabel").textContent = "Preparing…";
+  try {
+    photo.dataUrl = await prepareImage(file);
+    photo.remove = false;
+  } catch (err) {
+    showError(form, err.message);
+  }
+  renderPhotoPreview();
+});
+
+$("photoRemove").onclick = () => {
+  photo.dataUrl = null;
+  photo.remove = true;
+  renderPhotoPreview();
+};
+
+$("productForm").tone1.addEventListener("input", renderPhotoPreview);
+$("productForm").tone2.addEventListener("input", renderPhotoPreview);
 
 $("newProductBtn").onclick = () => openProductForm(null);
 $("overlay").onclick = closeModal;
@@ -249,14 +350,40 @@ $("productForm").addEventListener("submit", async (e) => {
     featured: form.featured.checked,
   };
 
+  const button = form.querySelector("button[type=submit]");
+  button.disabled = true;
+  button.textContent = "Saving…";
+
   try {
-    if (data.id) await api(`/api/admin/products/${data.id}`, { method: "PUT", body: payload });
-    else await api("/api/admin/products", { method: "POST", body: payload });
+    let id = data.id;
+    if (id) {
+      await api(`/api/admin/products/${id}`, { method: "PUT", body: payload });
+    } else {
+      ({ id } = await api("/api/admin/products", { method: "POST", body: payload }));
+      // If the photo upload below fails, retrying must update this product
+      // rather than create a second one.
+      form.id.value = id;
+      $("productFormTitle").textContent = "Edit product";
+    }
+
+    if (photo.dataUrl) {
+      const { image } = await api(`/api/admin/products/${id}/image`, { method: "PUT", body: { image: photo.dataUrl } });
+      photo.existing = image;
+      photo.dataUrl = null;
+    } else if (photo.remove && photo.existing) {
+      await api(`/api/admin/products/${id}/image`, { method: "DELETE" });
+      photo.existing = null;
+      photo.remove = false;
+    }
+
     closeModal();
     toast(data.id ? "Product updated" : "Product added");
-    loadProducts();
   } catch (err) {
     showError(form, err.message);
+  } finally {
+    button.disabled = false;
+    button.textContent = "Save product";
+    loadProducts();
   }
 });
 

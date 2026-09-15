@@ -174,7 +174,7 @@ function renderCart() {
     .map(
       (l) => `
     <div class="cart-row">
-      <div class="cart-thumb" style="background:linear-gradient(135deg,${esc(l.tone1)},${esc(l.tone2)})">NOOR</div>
+      <div class="cart-thumb" style="background:linear-gradient(135deg,${esc(l.tone1)},${esc(l.tone2)})">${l.image ? `<img src="${esc(l.image)}" alt="">` : "NOOR"}</div>
       <div>
         <strong>${esc(l.name)}</strong>
         <div class="price">${money(l.lineTotal)}</div>
@@ -259,7 +259,7 @@ function renderProducts() {
 
       return `
       <article class="product-card${soldOut ? " sold-out" : ""}">
-        <div class="product-image" style="background:linear-gradient(135deg,${esc(p.tone1)},${esc(p.tone2)})">${badges}</div>
+        <div class="product-image${p.image ? " has-photo" : ""}" style="background:linear-gradient(135deg,${esc(p.tone1)},${esc(p.tone2)})">${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy">` : ""}${badges}</div>
         <div class="product-info">
           <h3>${esc(p.name)}</h3>
           <p>${esc(titleCase(p.category))}</p>
@@ -287,7 +287,7 @@ function viewProduct(id) {
 
   $("modalContent").innerHTML = `
     <div class="modal-content">
-      <div class="modal-img" style="background:linear-gradient(135deg,${esc(p.tone1)},${esc(p.tone2)})">NOOR</div>
+      <div class="modal-img${p.image ? " has-photo" : ""}" style="background:linear-gradient(135deg,${esc(p.tone1)},${esc(p.tone2)})">${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name)}">` : "NOOR"}</div>
       <div>
         <p class="eyebrow">${esc(p.category.toUpperCase())}</p>
         <h2>${esc(p.name)}</h2>
